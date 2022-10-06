@@ -12,7 +12,7 @@ def get_waze_reports():
     }
 
     r = requests.get(
-        "https://www.waze.com/row-rtserver/web/TGeoRSS?bottom=48.15745091736649&left=17.141683197021488&ma=200&mj=200&mu=20&right=17.504045867919925&top=48.34650365458537", headers=headers)
+        "https://www.waze.com/row-rtserver/web/TGeoRSS?bottom=48.10745091736649&left=17.101683197021488&ma=200&mj=200&mu=20&right=17.504045867919925&top=48.34650365458537", headers=headers)
     r.raise_for_status()
     alerts = r.json().get('alerts', [])
     alerts = filter(lambda x: x['type'] in ['POLICE', 'ACCIDENT'], alerts)
