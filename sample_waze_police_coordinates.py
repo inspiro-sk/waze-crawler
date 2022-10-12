@@ -2,24 +2,13 @@
 
 import json
 import datetime
-import requests
+from crawler import Crawler
 
 
 def get_waze_reports():
-    headers = {
-        "referer": "https://www.waze.com/live-map",
-        "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36",
-    }
+    c = Crawler(49.01479241812091, 19.36074256896973, ["POLICE", "ACCIDENT"])
+    locations = c.get_reports()
 
-    r = requests.get(
-        # "https://www.waze.com/row-rtserver/web/TGeoRSS?bottom=48.10745091736649&left=17.101683197021488&ma=200&mj=200&mu=20&right=17.504045867919925&top=48.34650365458537"
-        "https://www.waze.com/row-rtserver/web/TGeoRSS?bottom=49.01479241812091&left=19.36074256896973&ma=200&mj=200&mu=20&right=19.64192390441895&top=49.13232883889429", headers=headers)
-    r.raise_for_status()
-    alerts = r.json().get('alerts', [])
-    alerts = filter(lambda x: x['type'] in ['POLICE', 'ACCIDENT'], alerts)
-    locations = map(lambda x: dict(
-        type=x['type'], lat=x['location']['y'], long=x['location']['x']), alerts)
-    locations = list(locations)
     return locations
 
 
