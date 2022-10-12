@@ -1,6 +1,6 @@
 import json
 import os
-from datetime import datetime
+from dotenv import load_dotenv
 from time import time
 import psycopg2
 import folium
@@ -48,30 +48,24 @@ def connect_db():
     """ Connect to the PostgreSQL database server """
     conn = None
     try:
-        # read connection parameters
-        # params = config()
-
-        # connect to the PostgreSQL server
+        load_dotenv()
         print('Connecting to the PostgreSQL database...')
-        # conn = psycopg2.connect(**params)
         conn = psycopg2.connect(
-            host="localhost",
-            database="waze",
-            user="rstana",
-            password="wity457&T(#&RJYOSdt4ojf8wty07o45ghrfojd78g648zusdoihf"
+            host=os.getenv('POSTGRESQL_HOST'),
+            database=os.getenv('POSTGRESQL_SCHEMA'),
+            user=os.getenv('POSTGRESQL_USER'),
+            password=os.getenv('POSTGRESQL_PASSWORD')
         )
 
-        # create a cursor
         cur = conn.cursor()
 
-        # execute a statement
         sql = """INSERT INTO coords(timestamp, lat, long, type)
              VALUES(%s, %s, %s, %s)"""
+
         cur.executemany(
             sql, [['1665124200895', '48.164593', '17.179617', 'ACCIDENT'], ['1665124200895', '48.164593', '17.179617', 'POLICE']])
-
-        # close the communication with the PostgreSQL
         conn.commit()
+
         cur.close()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
