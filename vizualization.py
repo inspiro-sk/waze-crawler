@@ -58,7 +58,7 @@ def connect_db():
             host="localhost",
             database="waze",
             user="rstana",
-            password="23Mud2h5@"
+            password="wity457&T(#&RJYOSdt4ojf8wty07o45ghrfojd78g648zusdoihf"
         )
 
         # create a cursor
