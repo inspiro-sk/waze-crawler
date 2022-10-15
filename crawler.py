@@ -1,4 +1,5 @@
 import requests
+import json
 
 
 class Crawler:
@@ -23,14 +24,27 @@ class Crawler:
             "top": self.lat + 0.4,
         }
 
+    def get_starting_point(self):
+        return (self.lat, self.long)
+
     def get_georss_params(self):
         return self.georss_params
+
+    '''
+        Define waze API URL that gets user reports - by default POLICE and ACCIDENT
+        types are being reported. Returns waze url.
+    '''
 
     def get_tgeorss_uri(self):
         tgeorss_uri = f"https://www.waze.com/row-rtserver/web/TGeoRSS?bottom=\
             {self.georss_params['bottom']}&left={self.georss_params['left']}&ma={self.georss_params['ma']}&mj={self.georss_params['mj']}&mu={self.georss_params['mu']}&right={self.georss_params['right']}&top={self.georss_params['top']}"
 
         return tgeorss_uri
+
+    '''
+        Get user reports from Waze API. 
+        Returns a list of locations with different user reports.
+    '''
 
     def get_reports(self):
         tgeorss_uri = self.get_tgeorss_uri()
@@ -43,6 +57,7 @@ class Crawler:
 
         locations = map(lambda x: dict(
             type=x['type'], lat=x['location']['y'], long=x['location']['x']), alerts)
-        locations = list(locations)
+
+        locations = json.dumps(list(locations))
 
         return locations
